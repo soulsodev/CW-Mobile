@@ -1,5 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:optical_salon/screens/home/home_screen.dart';
 import 'package:optical_salon/screens/registration/registration_screen.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -17,7 +19,10 @@ class _LoginScreenState extends State<LoginScreen> {
       child: CircleAvatar(
         backgroundColor: Colors.transparent,
         radius: 48.0,
-        child: Image.asset('assets/images/logo.png'),
+        child: Image.asset(
+          'assets/images/logo.png',
+          color: Color(0xFF00A693),
+        ),
       ),
     );
 
@@ -50,9 +55,14 @@ class _LoginScreenState extends State<LoginScreen> {
       // ignore: deprecated_member_use
       child: ElevatedButton(
         child: Text("Sign In"),
-        onPressed: () {},
+        onPressed: () => Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => HomeScreen(),
+          ),
+        ),
         style: ElevatedButton.styleFrom(
-          primary: Colors.lightBlueAccent,
+          primary: Color(0xFF00A693),
           onPrimary: Colors.white,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(24.0),
@@ -62,20 +72,28 @@ class _LoginScreenState extends State<LoginScreen> {
     );
 
     final signUpButton = OutlinedButton(
-        child: Text('Sign Up'),
-        onPressed: () => Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => RegistrationScreen(),
-          ),
+      child: Text(
+        'Sign Up',
+        style: TextStyle(
+          color: Color(0xFF00A693),
         ),
-        style: ElevatedButton.styleFrom(
-          side: BorderSide(width: 2.0, color: Colors.lightBlueAccent),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(24.0),
-          ),
+      ),
+      onPressed: () => Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => RegistrationScreen(),
         ),
-      );
+      ),
+      style: ElevatedButton.styleFrom(
+        side: BorderSide(
+          width: 1.0,
+          color: Color(0xFF00A693),
+        ),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(24.0),
+        ),
+      ),
+    );
 
     final forgotLabel = TextButton(
       child: Text(

@@ -17,7 +17,10 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
       child: CircleAvatar(
         backgroundColor: Colors.transparent,
         radius: 48.0,
-        child: Image.asset('assets/images/logo.png'),
+        child: Image.asset(
+          'assets/images/logo.png',
+          color: Color(0xFF00A693),
+        ),
       ),
     );
 
@@ -76,7 +79,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
         child: Text("Sign Up"),
         onPressed: () {},
         style: ElevatedButton.styleFrom(
-          primary: Colors.lightBlueAccent,
+          primary: Color(0xFF00A693),
           onPrimary: Colors.white,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(24.0),
@@ -89,10 +92,16 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
       padding: EdgeInsets.only(bottom: 8.0),
       // ignore: deprecated_member_use
       child: OutlinedButton(
-        child: Text('Sign In'),
+        child: Text(
+          'Sign In',
+          style: TextStyle(color: Color(0xFF00A693)),
+        ),
         onPressed: () => Navigator.pop(context),
         style: ElevatedButton.styleFrom(
-          side: BorderSide(width: 2.0, color: Colors.lightBlueAccent),
+          side: BorderSide(
+            width: 1.0,
+            color: Color(0xFF00A693),
+          ),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(24.0),
           ),
