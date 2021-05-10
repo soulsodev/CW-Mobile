@@ -5,8 +5,9 @@ import 'package:optical_salon/screens/account/account_screen.dart';
 import 'package:optical_salon/screens/booking/booking_screen.dart';
 import 'package:optical_salon/screens/cart/cart_screen.dart';
 import 'package:optical_salon/screens/catalog/catalog_screen.dart';
+import 'package:optical_salon/screens/login/login_screen.dart';
 import 'package:optical_salon/screens/news/news_screen.dart';
-
+import 'package:shared_preferences/shared_preferences.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -14,6 +15,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  SharedPreferences sharedPreferences;
   int _currentIndex = 0;
   static List<Widget> _widgetOptions = <Widget>[
     NewsScreen(),
@@ -29,6 +31,18 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 
+  @override
+  void initState() {
+    super.initState();
+    checkLoginStatus();
+  }
+
+  checkLoginStatus() async {
+    sharedPreferences = await SharedPreferences.getInstance();
+    if (sharedPreferences.getString('access_token') == null) {
+      Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (BuildContext context) => LoginScreen()), (Route<dynamic> route) => false);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -102,13 +116,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
   AppBar appBar(BuildContext context) {
     return AppBar(
-      leading: IconButton(
-        icon: Icon(
-          Icons.arrow_back,
-          color: Colors.white,
-        ),
-        onPressed: () => Navigator.pop(context),
-      ),
       centerTitle: true,
       title: Text(
         'Home',
@@ -119,7 +126,20 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       backgroundColor: Color(0xFF00A693),
       elevation: 0.0,
-      actions: [],
+      actions: [
+        IconButton(
+          icon: Icon(
+            Icons.logout,
+            color: Colors.white,
+          ),
+          onPressed: () {
+            sharedPreferences.clear();
+            // ignore: deprecated_member_use
+            sharedPreferences.commit();
+            Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (BuildContext context) => LoginScreen()), (Route<dynamic> route) => false);
+          },
+        ),
+      ],
     );
   }
 }

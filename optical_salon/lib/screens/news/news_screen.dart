@@ -2,9 +2,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:optical_salon/constants.dart';
 import 'package:optical_salon/models/news.dart';
-import 'package:optical_salon/screens/home/components/primary_card.dart';
-import 'package:optical_salon/screens/home/components/secondary_card.dart';
-import 'package:optical_salon/screens/home/read_news_screen.dart';
+import 'package:optical_salon/screens/news/read_news_screen.dart';
+
+import 'components/primary_card.dart';
+import 'components/secondary_card.dart';
 
 class NewsScreen extends StatefulWidget {
   @override

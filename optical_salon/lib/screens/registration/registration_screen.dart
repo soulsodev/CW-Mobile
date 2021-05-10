@@ -1,6 +1,9 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:optical_salon/screens/login/login_screen.dart';
+import 'package:optical_salon/models/user.dart';
+import 'package:http/http.dart' as http;
 
 class RegistrationScreen extends StatefulWidget {
   static String tag = 'registration-screen';
@@ -10,6 +13,36 @@ class RegistrationScreen extends StatefulWidget {
 }
 
 class _RegistrationScreenState extends State<RegistrationScreen> {
+  TextEditingController _emailController = TextEditingController();
+  TextEditingController _nameController = TextEditingController();
+  TextEditingController _phoneController = TextEditingController();
+  TextEditingController _passwordController = TextEditingController();
+  TextEditingController _confirmPasswordController = TextEditingController();
+  final GlobalKey<FormState> _key = GlobalKey<FormState>();
+
+  Future<User> signUp(
+      String name, String phone, String email, String password) async {
+    //final _url = "http://192.168.100.9:5000/auth/registration";
+    //final _url = "http://localhost:5000/auth/registration";
+    final _url = "http://10.0.2.2:5000/auth/registration";
+    Map<String, dynamic> req = {
+      'name': name,
+      'phone': phone,
+      'email': email,
+      'password': password
+    };
+    final http.Response res = await http.post(
+      Uri.parse(_url),
+      headers: {'Content-Type': 'application/json'},
+      body: jsonEncode(req),
+    );
+    if (res.statusCode == 201) {
+      return User.fromJson(json.decode(res.body));
+    } else {
+      throw Exception('Failed  to sign up user');
+    }
+  }
+  
   @override
   Widget build(BuildContext context) {
     final logo = Hero(
@@ -25,8 +58,15 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
     );
 
     final name = TextFormField(
+      controller: _nameController,
       keyboardType: TextInputType.name,
       autofocus: false,
+      validator: (val) {
+        if (val.isEmpty) {
+          return 'Name field is empty';
+        }
+        return null;
+      },
       decoration: InputDecoration(
         hintText: 'Name',
         contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
@@ -37,8 +77,15 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
     );
 
     final phone = TextFormField(
+      controller: _phoneController,
       keyboardType: TextInputType.phone,
       autofocus: false,
+      validator: (val) {
+        if (val.isEmpty) {
+          return 'Phone field is empty';
+        }
+        return null;
+      },
       decoration: InputDecoration(
         hintText: '+375 (XX) XXX-XX-XX',
         contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
@@ -49,8 +96,15 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
     );
 
     final email = TextFormField(
+      controller: _emailController,
       keyboardType: TextInputType.emailAddress,
       autofocus: false,
+      validator: (val) {
+        if (val.isEmpty) {
+          return 'Email field is empty';
+        }
+        return null;
+      },
       decoration: InputDecoration(
         hintText: 'Email',
         contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
@@ -61,8 +115,36 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
     );
 
     final password = TextFormField(
+      controller: _passwordController,
       autofocus: false,
       obscureText: true,
+      validator: (val) {
+        if (val.isEmpty) {
+          return 'Password field is empty';
+        }
+        return null;
+      },
+      decoration: InputDecoration(
+        hintText: 'Password',
+        contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(32.0),
+        ),
+      ),
+    );
+
+    final confirmPassword = TextFormField(
+      controller: _confirmPasswordController,
+      autofocus: false,
+      obscureText: true,
+      validator: (val) {
+        if (val.isEmpty) {
+          return 'Password field is empty';
+        } else if (val != _passwordController.text) {
+          return 'Password mismatch';
+        }
+        return null;
+      },
       decoration: InputDecoration(
         hintText: 'Password',
         contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
@@ -77,7 +159,18 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
       // ignore: deprecated_member_use
       child: ElevatedButton(
         child: Text("Sign Up"),
-        onPressed: () {},
+        onPressed: () {
+          setState(() {
+            _key.currentState.validate();
+            signUp(
+              _nameController.text,
+              _phoneController.text,
+              _emailController.text,
+              _passwordController.text,
+            );
+            Navigator.pop(context);
+          });
+        },
         style: ElevatedButton.styleFrom(
           primary: Color(0xFF00A693),
           onPrimary: Colors.white,
@@ -120,29 +213,34 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
 
     return Scaffold(
       backgroundColor: Colors.white,
-      body: Center(
-        child: ListView(
-          shrinkWrap: true,
-          padding: EdgeInsets.only(left: 24.0, right: 24.0),
-          children: <Widget>[
-            logo,
-            SizedBox(height: 48.0),
-            Align(
-              alignment: Alignment.center,
-              child: formLabel,
-            ),
-            SizedBox(height: 16.0),
-            name,
-            SizedBox(height: 8.0),
-            phone,
-            SizedBox(height: 8.0),
-            email,
-            SizedBox(height: 8.0),
-            password,
-            SizedBox(height: 8.0),
-            signUpButton,
-            signInButton
-          ],
+      body: Form(
+        key: _key,
+        child: Center(
+          child: ListView(
+            shrinkWrap: true,
+            padding: EdgeInsets.only(left: 24.0, right: 24.0),
+            children: <Widget>[
+              logo,
+              SizedBox(height: 48.0),
+              Align(
+                alignment: Alignment.center,
+                child: formLabel,
+              ),
+              SizedBox(height: 16.0),
+              name,
+              SizedBox(height: 8.0),
+              phone,
+              SizedBox(height: 8.0),
+              email,
+              SizedBox(height: 8.0),
+              password,
+              SizedBox(height: 8.0),
+              confirmPassword,
+              SizedBox(height: 8.0),
+              signUpButton,
+              signInButton
+            ],
+          ),
         ),
       ),
     );

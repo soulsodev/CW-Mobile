@@ -1,8 +1,12 @@
+import 'dart:convert';
+import 'dart:developer';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:optical_salon/screens/home/home_screen.dart';
 import 'package:optical_salon/screens/registration/registration_screen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:http/http.dart' as http;
 
 class LoginScreen extends StatefulWidget {
   static String tag = 'login-screen';
@@ -12,6 +16,44 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  TextEditingController _emailController = TextEditingController();
+  TextEditingController _passwordController = TextEditingController();
+  bool _isLoading = false;
+
+  signIn(String email, String password) async {
+    //final _url = "http://192.168.100.9:5000/auth/login";
+    //final _url = "http://localhost:5000/auth/login";
+    final _url = "http://10.0.2.2:5000/auth/login";
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    Map body = {"username": email, "password": password};
+    var jsonResponse;
+    var res = await http.post(Uri.parse(_url), body: body);
+    print(res.statusCode);
+    // Check API status
+    if (res.statusCode == 201) {
+      jsonResponse = json.decode(res.body);
+
+      print('Response status: ${res.statusCode}');
+      print('Response body: ${res.body}');
+
+      if (jsonResponse != null) {
+        setState(() {
+          _isLoading = false;
+        });
+        sharedPreferences.setString(
+            'access_token', jsonResponse['access_token']);
+        Navigator.of(context).pushAndRemoveUntil(
+            MaterialPageRoute(builder: (BuildContext context) => HomeScreen()),
+            (Route<dynamic> route) => false);
+      }
+    } else {
+      setState(() {
+        _isLoading = false;
+      });
+      print('Response body: ${res.body}');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final logo = Hero(
@@ -27,6 +69,7 @@ class _LoginScreenState extends State<LoginScreen> {
     );
 
     final email = TextFormField(
+      controller: _emailController,
       keyboardType: TextInputType.emailAddress,
       autofocus: false,
       decoration: InputDecoration(
@@ -39,6 +82,7 @@ class _LoginScreenState extends State<LoginScreen> {
     );
 
     final password = TextFormField(
+      controller: _passwordController,
       autofocus: false,
       obscureText: true,
       decoration: InputDecoration(
@@ -55,12 +99,12 @@ class _LoginScreenState extends State<LoginScreen> {
       // ignore: deprecated_member_use
       child: ElevatedButton(
         child: Text("Sign In"),
-        onPressed: () => Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => HomeScreen(),
-          ),
-        ),
+        onPressed: () {
+          setState(() {
+            _isLoading = true;
+          });
+          signIn(_emailController.text, _passwordController.text);
+        },
         style: ElevatedButton.styleFrom(
           primary: Color(0xFF00A693),
           onPrimary: Colors.white,
@@ -117,26 +161,28 @@ class _LoginScreenState extends State<LoginScreen> {
     return Scaffold(
       backgroundColor: Colors.white,
       body: Center(
-        child: ListView(
-          shrinkWrap: true,
-          padding: EdgeInsets.only(left: 24.0, right: 24.0),
-          children: <Widget>[
-            logo,
-            SizedBox(height: 48.0),
-            Align(
-              alignment: Alignment.center,
-              child: formLabel,
-            ),
-            SizedBox(height: 16.0),
-            email,
-            SizedBox(height: 8.0),
-            password,
-            SizedBox(height: 8.0),
-            signInButton,
-            signUpButton,
-            forgotLabel
-          ],
-        ),
+        child: _isLoading
+            ? Center(child: CircularProgressIndicator())
+            : ListView(
+                shrinkWrap: true,
+                padding: EdgeInsets.only(left: 24.0, right: 24.0),
+                children: <Widget>[
+                  logo,
+                  SizedBox(height: 48.0),
+                  Align(
+                    alignment: Alignment.center,
+                    child: formLabel,
+                  ),
+                  SizedBox(height: 16.0),
+                  email,
+                  SizedBox(height: 8.0),
+                  password,
+                  SizedBox(height: 8.0),
+                  signInButton,
+                  signUpButton,
+                  forgotLabel
+                ],
+              ),
       ),
     );
   }
