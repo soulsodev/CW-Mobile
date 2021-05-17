@@ -25,7 +25,7 @@ class SecondaryCard extends StatelessWidget {
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(12.0),
               image: DecorationImage(
-                image: NetworkImage(news.image),
+                image: NetworkImage('http://192.168.0.103:5000/' + news.image),
                 fit: BoxFit.cover,
               ),
             ),
@@ -49,15 +49,6 @@ class SecondaryCard extends StatelessWidget {
                     overflow: TextOverflow.ellipsis,
                     maxLines: 2,
                     style: kDetailContent,
-                  ),
-                  Spacer(),
-                  Row(
-                    children: [
-                      Text(
-                        news.date,
-                        style: kDetailContent,
-                      ),
-                    ],
                   ),
                 ],
               ),

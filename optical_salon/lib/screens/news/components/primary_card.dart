@@ -20,19 +20,6 @@ class PrimaryCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
-            children: [
-              CircleAvatar(
-                radius: 5.0,
-                backgroundColor: Color(0xFF00A693),
-              ),
-              SizedBox(width: 10.0),
-              Text(
-                news.category,
-                style: kCategoryTitle,
-              ),
-            ],
-          ),
           SizedBox(height: 5.0),
           Expanded(
             child: Hero(
@@ -41,7 +28,7 @@ class PrimaryCard extends StatelessWidget {
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(15.0),
                   image: DecorationImage(
-                    image: NetworkImage(news.image),
+                    image: NetworkImage('http://192.168.0.103:5000/' + news.image),
                     fit: BoxFit.cover,
                   ),
                 ),
@@ -56,14 +43,6 @@ class PrimaryCard extends StatelessWidget {
             style: kTitleCard,
           ),
           SizedBox(height: 5.0),
-          Row(
-            children: [
-              Text(
-                news.date,
-                style: kDetailContent,
-              ),
-            ],
-          ),
         ],
       ),
     );

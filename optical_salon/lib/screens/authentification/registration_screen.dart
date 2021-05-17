@@ -22,9 +22,9 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
 
   Future<User> signUp(
       String name, String phone, String email, String password) async {
-    //final _url = "http://192.168.100.9:5000/auth/registration";
+    final _url = "http://192.168.0.103:5000/auth/registration";
     //final _url = "http://localhost:5000/auth/registration";
-    final _url = "http://10.0.2.2:5000/auth/registration";
+    //final _url = "http://10.0.2.2:5000/auth/registration";
     Map<String, dynamic> req = {
       'name': name,
       'phone': phone,
@@ -39,7 +39,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
     if (res.statusCode == 201) {
       return User.fromJson(json.decode(res.body));
     } else {
-      throw Exception('Failed  to sign up user');
+      throw Exception('Failed to sign up user');
     }
   }
   
@@ -71,7 +71,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
         hintText: 'Name',
         contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
         border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(32.0),
+          borderRadius: BorderRadius.circular(16.0),
         ),
       ),
     );
@@ -90,7 +90,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
         hintText: '+375 (XX) XXX-XX-XX',
         contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
         border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(32.0),
+          borderRadius: BorderRadius.circular(16.0),
         ),
       ),
     );
@@ -109,7 +109,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
         hintText: 'Email',
         contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
         border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(32.0),
+          borderRadius: BorderRadius.circular(16.0),
         ),
       ),
     );
@@ -128,7 +128,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
         hintText: 'Password',
         contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
         border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(32.0),
+          borderRadius: BorderRadius.circular(16.0),
         ),
       ),
     );
@@ -149,7 +149,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
         hintText: 'Password',
         contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
         border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(32.0),
+          borderRadius: BorderRadius.circular(16.0),
         ),
       ),
     );
@@ -175,7 +175,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
           primary: Color(0xFF00A693),
           onPrimary: Colors.white,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(24.0),
+            borderRadius: BorderRadius.circular(16.0),
           ),
         ),
       ),
@@ -196,7 +196,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
             color: Color(0xFF00A693),
           ),
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(24.0),
+            borderRadius: BorderRadius.circular(16.0),
           ),
         ),
       ),

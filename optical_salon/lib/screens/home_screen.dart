@@ -1,11 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:optical_salon/screens/account/account_screen.dart';
-import 'package:optical_salon/screens/booking/booking_screen.dart';
-import 'package:optical_salon/screens/cart/cart_screen.dart';
-import 'package:optical_salon/screens/catalog/catalog_screen.dart';
-import 'package:optical_salon/screens/login/login_screen.dart';
+import 'package:optical_salon/screens/account_screen.dart';
+import 'package:optical_salon/screens/booking_screen.dart';
+import 'package:optical_salon/screens/cart_screen.dart';
+import 'package:optical_salon/screens/catalog_screen.dart';
+import 'package:optical_salon/screens/authentification/login_screen.dart';
 import 'package:optical_salon/screens/news/news_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 

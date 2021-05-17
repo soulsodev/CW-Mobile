@@ -1,10 +1,10 @@
 import 'dart:convert';
-import 'dart:developer';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:optical_salon/screens/home/home_screen.dart';
-import 'package:optical_salon/screens/registration/registration_screen.dart';
+import 'package:flutter/services.dart';
+import 'package:optical_salon/screens/home_screen.dart';
+import 'package:optical_salon/screens/authentification/registration_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
@@ -21,12 +21,13 @@ class _LoginScreenState extends State<LoginScreen> {
   bool _isLoading = false;
 
   signIn(String email, String password) async {
-    //final _url = "http://192.168.100.9:5000/auth/login";
+    final _url = "http://192.168.0.103:5000/auth/login";
     //final _url = "http://localhost:5000/auth/login";
-    final _url = "http://10.0.2.2:5000/auth/login";
+    //final _url = "http://10.0.2.2:5000/auth/login";
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     Map body = {"username": email, "password": password};
     var jsonResponse;
+    print("RESPONSE");
     var res = await http.post(Uri.parse(_url), body: body);
     print(res.statusCode);
     // Check API status
@@ -35,13 +36,16 @@ class _LoginScreenState extends State<LoginScreen> {
 
       print('Response status: ${res.statusCode}');
       print('Response body: ${res.body}');
+      print('Response token: ${jsonResponse['access_token']}');
 
       if (jsonResponse != null) {
         setState(() {
           _isLoading = false;
         });
-        sharedPreferences.setString(
-            'access_token', jsonResponse['access_token']);
+        //if(Platform.isAndroid) {
+          sharedPreferences.setString(
+              'access_token', jsonResponse['access_token']);
+        //}
         Navigator.of(context).pushAndRemoveUntil(
             MaterialPageRoute(builder: (BuildContext context) => HomeScreen()),
             (Route<dynamic> route) => false);
@@ -76,7 +80,7 @@ class _LoginScreenState extends State<LoginScreen> {
         hintText: 'Email',
         contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
         border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(32.0),
+          borderRadius: BorderRadius.circular(16.0),
         ),
       ),
     );
@@ -89,7 +93,7 @@ class _LoginScreenState extends State<LoginScreen> {
         hintText: 'Password',
         contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
         border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(32.0),
+          borderRadius: BorderRadius.circular(16.0),
         ),
       ),
     );
@@ -109,7 +113,7 @@ class _LoginScreenState extends State<LoginScreen> {
           primary: Color(0xFF00A693),
           onPrimary: Colors.white,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(24.0),
+            borderRadius: BorderRadius.circular(16.0),
           ),
         ),
       ),
@@ -134,7 +138,7 @@ class _LoginScreenState extends State<LoginScreen> {
           color: Color(0xFF00A693),
         ),
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(24.0),
+          borderRadius: BorderRadius.circular(16.0),
         ),
       ),
     );

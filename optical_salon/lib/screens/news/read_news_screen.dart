@@ -44,53 +44,16 @@ class ReadNewsScreen extends StatelessWidget {
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(15.0),
                   image: DecorationImage(
-                    image: NetworkImage(news.image),
+                    image: NetworkImage('http://192.168.0.103:5000/' + news.image),
                     fit: BoxFit.fill,
                   ),
                 ),
               ),
             ),
             SizedBox(height: 15.0),
-            Row(
-              children: [
-                Container(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: 12.0,
-                    vertical: 15.0,
-                  ),
-                  decoration: BoxDecoration(
-                    border: Border.all(color: Color(0xFF00A693), width: 1.0),
-                    borderRadius: BorderRadius.circular(25.0),
-                  ),
-                  child: Row(
-                    children: [
-                      CircleAvatar(
-                        radius: 5.0,
-                        backgroundColor: Color(0xFF00A693),
-                      ),
-                      SizedBox(width: 6.0),
-                      Text(
-                        news.category,
-                        style: kCategoryTitle,
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-            SizedBox(height: 12.0),
             Text(
               news.title,
               style: kTitleCard.copyWith(fontSize: 28.0),
-            ),
-            SizedBox(height: 15.0),
-            Row(
-              children: [
-                Text(
-                  news.date,
-                  style: kDetailContent,
-                ),
-              ],
             ),
             SizedBox(height: 15.0),
             Text(
