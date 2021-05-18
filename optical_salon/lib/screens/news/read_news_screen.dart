@@ -1,13 +1,24 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:optical_salon/constants.dart';
 import 'package:optical_salon/models/news.dart';
 import 'package:optical_salon/screens/news/update_news_screen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-class ReadNewsScreen extends StatelessWidget {
+class ReadNewsScreen extends StatefulWidget {
   final News news;
 
   const ReadNewsScreen({Key key, this.news}) : super(key: key);
+
+  @override
+  _ReadNewsScreenState createState() => _ReadNewsScreenState(news);
+}
+
+class _ReadNewsScreenState extends State<ReadNewsScreen> {
+  final News news;
+
+  _ReadNewsScreenState(this.news);
 
   @override
   Widget build(BuildContext context) {
@@ -32,8 +43,7 @@ class ReadNewsScreen extends StatelessWidget {
             onPressed: () => Navigator.pushReplacement(
               context,
               MaterialPageRoute(
-                builder: (context) =>
-                    UpdateNewsScreen(news: news),
+                builder: (context) => UpdateNewsScreen(news: news),
               ),
             ),
           ),
@@ -42,7 +52,7 @@ class ReadNewsScreen extends StatelessWidget {
               Icons.delete,
               color: Colors.white,
             ),
-            onPressed: null,
+            onPressed: () => deleteNewsAlert(news.id),
           ),
         ],
       ),
@@ -58,7 +68,8 @@ class ReadNewsScreen extends StatelessWidget {
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(15.0),
                   image: DecorationImage(
-                    image: NetworkImage('http://192.168.0.103:5000/' + news.image),
+                    image:
+                        NetworkImage('http://192.168.0.103:5000/' + news.image),
                     fit: BoxFit.fill,
                   ),
                 ),
@@ -73,8 +84,13 @@ class ReadNewsScreen extends StatelessWidget {
             Row(
               children: [
                 Text(
-                  DateFormat("yyyy-MM-dd").parse(news.date).day.toString() + '.' +
-                      DateFormat("yyyy-MM-dd").parse(news.date).month.toString() + '.' +
+                  DateFormat("yyyy-MM-dd").parse(news.date).day.toString() +
+                      '.' +
+                      DateFormat("yyyy-MM-dd")
+                          .parse(news.date)
+                          .month
+                          .toString() +
+                      '.' +
                       DateFormat("yyyy-MM-dd").parse(news.date).year.toString(),
                   style: kDetailContent,
                 ),
@@ -89,6 +105,60 @@ class ReadNewsScreen extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+
+  Future<News> deleteNews(int id) async {
+    var dio = Dio();
+    var sharedPreferences = await SharedPreferences.getInstance();
+    String access_token = sharedPreferences.getString('access_token');
+    final _url = "http://192.168.0.103:5000/news/$id";
+    //final _url = "http://192.168.43.244:5000/news/$id";
+    //final _url = "http: //localhost:5000/news/$id";
+    //final _url = "http://10.0.2.2:5000/news/$id";
+
+    dio.options.headers["authorization"] = "Bearer $access_token";
+    var res = await dio.deleteUri(
+      Uri.parse(_url),
+    );
+
+    if (res.statusCode == 200 || res.statusCode == 201) {
+      print('Deleted!');
+      Navigator.pop(context);
+    } else {
+      throw Exception('Failed to delete news');
+    }
+  }
+
+  void deleteNewsAlert(int id) async {
+    Widget cancelButton = MaterialButton(
+      child: Text('Cancel'),
+      onPressed: () => Navigator.of(context).pop(),
+    );
+    Widget submitButton = MaterialButton(
+      child: Text('Submit'),
+      onPressed: () => setState(
+        () {
+          deleteNews(id);
+          Navigator.of(context).pop();
+        },
+      ),
+    );
+
+    var alert = AlertDialog(
+      title: const Text('Are you sure?'),
+      content: Text('Would you like to delete selected news?'),
+      actions: [
+        cancelButton,
+        submitButton,
+      ],
+    );
+
+    showDialog(
+      context: context,
+      builder: (context) {
+        return alert;
+      },
     );
   }
 }

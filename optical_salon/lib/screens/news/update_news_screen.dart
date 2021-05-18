@@ -35,9 +35,9 @@ class _UpdateNewsScreenState extends State<UpdateNewsScreen> {
     var formData;
     var res;
     final _url = "http://192.168.0.103:5000/news/$id";
-    //final _url = "http://192.168.43.244:5000/news";
-    //final _url = "http: //localhost:5000/news";
-    //final _url = "http://10.0.2.2:5000/news";
+    //final _url = "http://192.168.43.244:5000/news/$id";
+    //final _url = "http: //localhost:5000/news/$id";
+    //final _url = "http://10.0.2.2:5000/news/$id";
 
     if (image != null) {
       formData = FormData.fromMap({
