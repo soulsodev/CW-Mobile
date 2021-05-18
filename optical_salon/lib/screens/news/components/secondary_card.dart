@@ -2,10 +2,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:optical_salon/constants.dart';
 import 'package:optical_salon/models/news.dart';
+import 'package:intl/intl.dart';
 
 class SecondaryCard extends StatelessWidget {
   final News news;
-
   const SecondaryCard({Key key, this.news}) : super(key: key);
 
   @override
@@ -49,6 +49,17 @@ class SecondaryCard extends StatelessWidget {
                     overflow: TextOverflow.ellipsis,
                     maxLines: 2,
                     style: kDetailContent,
+                  ),
+                  Spacer(),
+                  Row(
+                    children: [
+                      Text(
+                        DateFormat("yyyy-MM-dd").parse(news.date).day.toString() + '-' +
+                            DateFormat("yyyy-MM-dd").parse(news.date).month.toString() + '-' +
+                            DateFormat("yyyy-MM-dd").parse(news.date).year.toString(),
+                        style: kDetailContent,
+                      ),
+                    ],
                   ),
                 ],
               ),

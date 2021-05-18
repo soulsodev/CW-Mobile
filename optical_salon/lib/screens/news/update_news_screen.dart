@@ -1,53 +1,66 @@
 import 'dart:io';
-import 'package:http_parser/http_parser.dart';
+
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:optical_salon/models/news.dart';
-import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:dio/dio.dart';
 
 import '../home_screen.dart';
 
-class AddNewsScreen extends StatefulWidget {
-  const AddNewsScreen({Key key}) : super(key: key);
+class UpdateNewsScreen extends StatefulWidget {
+  final News news;
+
+  const UpdateNewsScreen({Key key, this.news}) : super(key: key);
 
   @override
-  _AddNewsScreenState createState() => _AddNewsScreenState();
+  _UpdateNewsScreenState createState() => _UpdateNewsScreenState(news);
 }
 
-class _AddNewsScreenState extends State<AddNewsScreen> {
+class _UpdateNewsScreenState extends State<UpdateNewsScreen> {
+  final News news;
+  final GlobalKey<FormState> _key = GlobalKey<FormState>();
   TextEditingController _titleController = TextEditingController();
   TextEditingController _descriptionController = TextEditingController();
-  final GlobalKey<FormState> _key = GlobalKey<FormState>();
-  File _image;
   Dio dio = Dio();
-  FormData formData = FormData();
+  File _image;
+
+  _UpdateNewsScreenState(this.news);
 
   // ignore: missing_return
-  Future<News> uploadNews(
-      String title, String description, File image) async {
-    print('UPLOADING NEWS');
+  Future<News> updateNews(
+      int id, String title, String description, File image) async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     String access_token = sharedPreferences.getString('access_token');
-
-    final _url = "http://192.168.0.103:5000/news";
+    var formData;
+    var res;
+    final _url = "http://192.168.0.103:5000/news/$id";
     //final _url = "http://192.168.43.244:5000/news";
-    //final _url = "http://localhost:5000/news";
+    //final _url = "http: //localhost:5000/news";
     //final _url = "http://10.0.2.2:5000/news";
 
-    var formData = FormData.fromMap({
-      'title': title,
-      'description': description,
-      'image': await MultipartFile.fromFile(_image.path, filename: _image.path),
-    });
-    dio.options.headers["authorization"] = "Bearer $access_token";
-    var res = await dio.post(_url, data: formData);
+    if (image != null) {
+      formData = FormData.fromMap({
+        'title': title,
+        'description': description,
+        'image':
+            await MultipartFile.fromFile(_image.path, filename: _image.path),
+      });
+      dio.options.headers["authorization"] = "Bearer $access_token";
+      res = await dio.put(_url, data: formData);
+    } else {
+      formData = FormData.fromMap({
+        'title': title,
+        'description': description,
+      });
+      dio.options.headers["authorization"] = "Bearer $access_token";
+      res = await dio.put(_url, data: formData);
+    }
 
     if (res.statusCode == 200 || res.statusCode == 201) {
-      print('Uploaded!');
+      print('Updated!');
     } else {
-      throw Exception('Failed to upload news');
+      throw Exception('Failed to update news');
     }
   }
 
@@ -102,6 +115,9 @@ class _AddNewsScreenState extends State<AddNewsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    _titleController.text = news.title;
+    _descriptionController.text = news.description;
+
     final title = TextFormField(
       controller: _titleController,
       keyboardType: TextInputType.text,
@@ -141,32 +157,6 @@ class _AddNewsScreenState extends State<AddNewsScreen> {
       ),
     );
 
-    final uploadNewsButton = Padding(
-      padding: EdgeInsets.only(top: 16.0),
-      // ignore: deprecated_member_use
-      child: ElevatedButton(
-        child: Text('Upload'),
-        onPressed: () {
-          _key.currentState.validate();
-          setState(() {
-            uploadNews(
-              _titleController.text,
-              _descriptionController.text,
-              _image,
-            );
-           Navigator.pop(context);
-          });
-        },
-        style: ElevatedButton.styleFrom(
-          primary: Color(0xFF00A693),
-          onPrimary: Colors.white,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16.0),
-          ),
-        ),
-      ),
-    );
-
     final imagePicker = Center(
       child: GestureDetector(
         onTap: () {
@@ -192,37 +182,58 @@ class _AddNewsScreenState extends State<AddNewsScreen> {
                     fit: BoxFit.cover,
                   ),
                 )
-              : Container(
-                  decoration: BoxDecoration(
-                    color: Colors.grey[200],
-                    borderRadius: BorderRadius.circular(16.0),
-                  ),
-                  width: 200,
-                  height: 400,
-                  child: Icon(
-                    Icons.camera_alt,
-                    color: Colors.grey[800],
+              : Hero(
+                  tag: news.image,
+                  child: Container(
+                    height: 220.0,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(15.0),
+                      image: DecorationImage(
+                        image: NetworkImage(
+                            'http://192.168.0.103:5000/' + news.image),
+                        fit: BoxFit.fill,
+                      ),
+                    ),
                   ),
                 ),
         ),
       ),
     );
 
+    final updateNewsButton = Padding(
+      padding: EdgeInsets.only(top: 16.0),
+      // ignore: deprecated_member_use
+      child: ElevatedButton(
+        child: Text('Update'),
+        onPressed: () {
+          _key.currentState.validate();
+          setState(() {
+            updateNews(news.id, _titleController.text,
+                _descriptionController.text, _image);
+            Navigator.pop(context);
+          });
+        },
+        style: ElevatedButton.styleFrom(
+          primary: Color(0xFF00A693),
+          onPrimary: Colors.white,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16.0),
+          ),
+        ),
+      ),
+    );
+
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: Color(0xFF00A693),
         title: Text(
-          'Adding news',
-          style: TextStyle(
-            color: Color(0xFF00A693),
-          ),
+          'Updating news',
         ),
         centerTitle: true,
         elevation: 0.0,
         leading: IconButton(
           icon: Icon(
             Icons.arrow_back,
-            color: Color(0xFF00A693),
           ),
           onPressed: () => Navigator.pop(context),
         ),
@@ -241,7 +252,7 @@ class _AddNewsScreenState extends State<AddNewsScreen> {
               SizedBox(height: 16.0),
               description,
               SizedBox(height: 8.0),
-              uploadNewsButton,
+              updateNewsButton,
             ],
           ),
         ),

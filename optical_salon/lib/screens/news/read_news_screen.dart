@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:optical_salon/constants.dart';
 import 'package:optical_salon/models/news.dart';
+import 'package:optical_salon/screens/news/update_news_screen.dart';
 
 class ReadNewsScreen extends StatelessWidget {
   final News news;
@@ -11,26 +13,38 @@ class ReadNewsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: PreferredSize(
-        preferredSize: Size.fromHeight(65.0),
-        child: Center(
-          child: SafeArea(
-            child: Padding(
-              padding: EdgeInsets.fromLTRB(18.0, 15.0, 18.0, 0),
-              child: Row(
-                children: [
-                  IconButton(
-                    icon: Icon(
-                      Icons.arrow_back,
-                      color: Color(0xFF00A693),
-                    ),
-                    onPressed: () => Navigator.pop(context),
-                  ),
-                ],
+      appBar: AppBar(
+        backgroundColor: Color(0xFF00A693),
+        title: Text('Read news'),
+        centerTitle: true,
+        leading: IconButton(
+          icon: Icon(
+            Icons.arrow_back,
+          ),
+          onPressed: () => Navigator.pop(context),
+        ),
+        actions: [
+          IconButton(
+            icon: Icon(
+              Icons.edit,
+              color: Colors.white,
+            ),
+            onPressed: () => Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (context) =>
+                    UpdateNewsScreen(news: news),
               ),
             ),
           ),
-        ),
+          IconButton(
+            icon: Icon(
+              Icons.delete,
+              color: Colors.white,
+            ),
+            onPressed: null,
+          ),
+        ],
       ),
       body: Container(
         padding: EdgeInsets.symmetric(horizontal: 18.0),
@@ -54,6 +68,17 @@ class ReadNewsScreen extends StatelessWidget {
             Text(
               news.title,
               style: kTitleCard.copyWith(fontSize: 28.0),
+            ),
+            SizedBox(height: 15.0),
+            Row(
+              children: [
+                Text(
+                  DateFormat("yyyy-MM-dd").parse(news.date).day.toString() + '.' +
+                      DateFormat("yyyy-MM-dd").parse(news.date).month.toString() + '.' +
+                      DateFormat("yyyy-MM-dd").parse(news.date).year.toString(),
+                  style: kDetailContent,
+                ),
+              ],
             ),
             SizedBox(height: 15.0),
             Text(

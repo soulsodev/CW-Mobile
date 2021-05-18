@@ -7,9 +7,11 @@ import 'package:optical_salon/models/news.dart';
 import 'package:optical_salon/screens/news/add_news_screen.dart';
 import 'package:optical_salon/screens/news/read_news_screen.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'components/primary_card.dart';
 import 'components/secondary_card.dart';
+import 'update_news_screen.dart';
 
 class NewsScreen extends StatefulWidget {
   @override
@@ -27,11 +29,14 @@ class _NewsScreenState extends State<NewsScreen> {
   }
 
   getAllNews() async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    String access_token = sharedPreferences.getString('access_token');
     final _url = "http://192.168.0.103:5000/news";
+    //final _url = "http://192.168.43.244:5000/news";
     //final _url = "http://localhost:5000/news";
     //final _url = "http://10.0.2.2:5000/news";
     var _uri = Uri.parse(_url);
-    var res = await http.get(_uri);
+    var res = await http.get(_uri, headers: {'Authorization': 'Bearer $access_token'},);
     var jsonResponse = jsonDecode(res.body);
     print(jsonResponse);
 
@@ -39,7 +44,8 @@ class _NewsScreenState extends State<NewsScreen> {
     newsList.clear();
 
     for (var n in jsonResponse) {
-      News news = News(n['title'], n['description'], n['image']);
+      News news = News(
+          n['id'], n['title'], n['description'], n['createdAt'], n['image']);
       newsListTemp.add(news);
     }
     print('NEWS COUNT: ' + newsList.length.toString());
@@ -58,8 +64,7 @@ class _NewsScreenState extends State<NewsScreen> {
           backgroundColor: Color(0xFFFFA500),
         ),
       );
-    }
-    else {
+    } else {
       return Scaffold(
         floatingActionButton: floatingActionButton(context),
         body: Container(
@@ -81,16 +86,20 @@ class _NewsScreenState extends State<NewsScreen> {
                   scrollDirection: Axis.horizontal,
                   shrinkWrap: true,
                   itemBuilder: (context, index) {
-                    var news = newsList[index];
+                    News news = newsList[index];
                     return InkWell(
-                      onTap: () =>
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) =>
-                                  ReadNewsScreen(news: news),
-                            ),
-                          ),
+                      onTap: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => ReadNewsScreen(news: news),
+                        ),
+                      ),
+                      onLongPress: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => UpdateNewsScreen(news: news),
+                        ),
+                      ),
                       child: Container(
                         margin: EdgeInsets.only(right: 12.0),
                         child: PrimaryCard(news: news),
@@ -118,19 +127,22 @@ class _NewsScreenState extends State<NewsScreen> {
                   itemBuilder: (context, index) {
                     var recent = newsList[index];
                     return InkWell(
-                      onTap: () =>
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) =>
-                                  ReadNewsScreen(news: recent),
-                            ),
-                          ),
+                      onTap: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => ReadNewsScreen(news: recent),
+                        ),
+                      ),
+                      onLongPress: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => UpdateNewsScreen(news: recent),
+                        ),
+                      ),
                       child: Container(
                         width: double.infinity,
                         height: 135.0,
-                        margin:
-                        EdgeInsets.symmetric(
+                        margin: EdgeInsets.symmetric(
                             horizontal: 18.0, vertical: 8.0),
                         child: SecondaryCard(news: recent),
                       ),
@@ -150,11 +162,9 @@ class _NewsScreenState extends State<NewsScreen> {
         Icons.add,
         color: Colors.white,
       ),
-      onPressed: () =>
-          Navigator.of(context).push(
-            MaterialPageRoute(
-                builder: (BuildContext context) => AddNewsScreen()),
-          ),
+      onPressed: () => Navigator.of(context).push(
+        MaterialPageRoute(builder: (BuildContext context) => AddNewsScreen()),
+      ),
     );
   }
 }

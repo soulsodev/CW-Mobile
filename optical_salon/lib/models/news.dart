@@ -1,9 +1,10 @@
 class News {
-  final String title;
-  final String description;
-  final String image;
+  int id;
+  String title;
+  String description;
+  String date;
+  String image;
 
-  News(this.title, this.description, this.image);
-
+  News(this.id, this.title, this.description, this.date, this.image);
 }
 
