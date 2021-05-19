@@ -28,25 +28,19 @@ class _LoginScreenState extends State<LoginScreen> {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     Map body = {"username": email, "password": password};
     var jsonResponse;
-    print("RESPONSE");
+
     var res = await http.post(Uri.parse(_url), body: body);
     print(res.statusCode);
     // Check API status
     if (res.statusCode == 201) {
       jsonResponse = json.decode(res.body);
 
-      print('Response status: ${res.statusCode}');
-      print('Response body: ${res.body}');
-      print('Response token: ${jsonResponse['access_token']}');
-
       if (jsonResponse != null) {
         setState(() {
           _isLoading = false;
         });
-        //if(Platform.isAndroid) {
           sharedPreferences.setString(
               'access_token', jsonResponse['access_token']);
-        //}
         Navigator.of(context).pushAndRemoveUntil(
             MaterialPageRoute(builder: (BuildContext context) => HomeScreen()),
             (Route<dynamic> route) => false);
@@ -55,7 +49,6 @@ class _LoginScreenState extends State<LoginScreen> {
       setState(() {
         _isLoading = false;
       });
-      print('Response body: ${res.body}');
     }
   }
 

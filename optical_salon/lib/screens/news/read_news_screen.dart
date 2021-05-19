@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -17,6 +19,8 @@ class ReadNewsScreen extends StatefulWidget {
 
 class _ReadNewsScreenState extends State<ReadNewsScreen> {
   final News news;
+  bool _isFavoriteNews = false;
+  var dio = Dio();
 
   _ReadNewsScreenState(this.news);
 
@@ -76,9 +80,30 @@ class _ReadNewsScreenState extends State<ReadNewsScreen> {
               ),
             ),
             SizedBox(height: 15.0),
-            Text(
-              news.title,
-              style: kTitleCard.copyWith(fontSize: 28.0),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  news.title,
+                  style: kTitleCard.copyWith(fontSize: 28.0),
+                ),
+                IconButton(
+                  icon: news.isFavorite == true
+                      ? Icon(
+                          Icons.favorite,
+                          color: Color(0xFF00A693),
+                        )
+                      : Icon(
+                          Icons.favorite_border,
+                          color: Color(0xFF00A693),
+                        ),
+                  onPressed: () {
+                    setState(() {
+                      favoriteNews(news.id);
+                    });
+                  },
+                )
+              ],
             ),
             SizedBox(height: 15.0),
             Row(
@@ -108,8 +133,65 @@ class _ReadNewsScreenState extends State<ReadNewsScreen> {
     );
   }
 
+  void markAsFavorite() {
+    setState(() => _isFavoriteNews = !_isFavoriteNews);
+  }
+
+  void favoriteNews(int id) {
+    setState(() {
+      if (news.isFavorite != true) {
+        addFavoriteNews(id);
+        news.isFavorite = true;
+      } else {
+        deleteFavoriteNews(id);
+        news.isFavorite = false;
+      }
+    });
+  }
+
+  Future<News> addFavoriteNews(int id) async {
+    var sharedPreferences = await SharedPreferences.getInstance();
+    String access_token = sharedPreferences.getString('access_token');
+    final _url = "http://192.168.0.103:5000/users/favorite/news";
+    //final _url = "http://192.168.43.244:5000/users/favorite/news";
+    //final _url = "http: //localhost:5000/users/favorite/news";
+    //final _url = "http://10.0.2.2:5000/users/favorite/news";
+    Map<String, dynamic> req = {
+      'newsId': id,
+    };
+    dio.options.headers['authorization'] = 'Bearer $access_token';
+    dio.options.headers['Content-Type'] = 'application/json';
+    var res = await dio.post(_url, data: jsonEncode(req));
+
+    if (res.statusCode == 200 || res.statusCode == 201) {
+      print('News added to favorite!');
+    } else {
+      throw Exception('Failed to add favorite news');
+    }
+  }
+
+  Future<News> deleteFavoriteNews(int id) async {
+    var sharedPreferences = await SharedPreferences.getInstance();
+    String access_token = sharedPreferences.getString('access_token');
+    final _url = "http://192.168.0.103:5000/users/favorite/news";
+    //final _url = "http://192.168.43.244:5000/users/favorite/news";
+    //final _url = "http: //localhost:5000/users/favorite/news";
+    //final _url = "http://10.0.2.2:5000/users/favorite/news";
+    Map<String, dynamic> req = {
+      'newsId': id,
+    };
+    dio.options.headers['authorization'] = 'Bearer $access_token';
+    dio.options.headers['Content-Type'] = 'application/json';
+    var res = await dio.deleteUri(Uri.parse(_url), data: jsonEncode(req));
+
+    if (res.statusCode == 200 || res.statusCode == 201) {
+      print('News deleted from favorite!');
+    } else {
+      throw Exception('Failed to delete favorite news');
+    }
+  }
+
   Future<News> deleteNews(int id) async {
-    var dio = Dio();
     var sharedPreferences = await SharedPreferences.getInstance();
     String access_token = sharedPreferences.getString('access_token');
     final _url = "http://192.168.0.103:5000/news/$id";

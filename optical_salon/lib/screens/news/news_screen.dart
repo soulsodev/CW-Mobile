@@ -45,10 +45,9 @@ class _NewsScreenState extends State<NewsScreen> {
 
     for (var n in jsonResponse) {
       News news = News(
-          n['id'], n['title'], n['description'], n['createdAt'], n['image']);
+          n['id'], n['title'], n['description'], n['createdAt'], n['image'], n['isFavorite']);
       newsListTemp.add(news);
     }
-    print('NEWS COUNT: ' + newsList.length.toString());
     setState(() {
       newsList = newsListTemp;
     });
