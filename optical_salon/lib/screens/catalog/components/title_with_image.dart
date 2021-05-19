@@ -32,25 +32,25 @@ class TitleWithImage extends StatelessWidget {
               ),
             ],
           ),
-          SizedBox(height: 16.0),
           Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    product.name + ' ' + product.brand,
-                    style: Theme.of(context).textTheme.headline5.copyWith(
-                        color: Color(0xFF00A693), fontWeight: FontWeight.bold),
-                  ),
-                  Text(
-                    product.model,
-                    style: TextStyle(
-                      fontSize: 18.0,
-                      fontWeight: FontWeight.bold,
+              Text(
+                product.name + ' ' + product.brand,
+                style: Theme.of(context).textTheme.headline5.copyWith(
+                    color: Color(0xFF00A693), fontWeight: FontWeight.bold),
+              ),
+              RichText(
+                text: TextSpan(
+                  children: [
+                    TextSpan(
+                      text: "\$${product.cost}",
+                      style: Theme.of(context).textTheme.headline4.copyWith(
+                          color: Color(0xFFFFA500),
+                          fontWeight: FontWeight.bold),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ],
           ),
@@ -141,26 +141,6 @@ class TitleWithImage extends StatelessWidget {
             ],
           ),
           SizedBox(height: 16.0),
-          RichText(
-            text: TextSpan(
-              children: [
-                TextSpan(
-                  text: "Price\n",
-                  style: TextStyle(
-                    fontSize: 20.0,
-                    fontWeight: FontWeight.bold,
-                    color: Color(0xFF00A693),
-                  ),
-                ),
-                TextSpan(
-                  text: "\$${product.cost}",
-                  style: Theme.of(context).textTheme.headline4.copyWith(
-                      color: Color(0xFFFFA500),
-                      fontWeight: FontWeight.bold),
-                ),
-              ],
-            ),
-          ),
         ],
       ),
     );
