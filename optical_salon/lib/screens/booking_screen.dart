@@ -35,13 +35,12 @@ class _BookingScreenState extends State<BookingScreen> {
   }
 
   Future<Consultation> addConsultation(
-      int userId, int salonId, String datetime, String service) async {
+      int salonId, String datetime, String service) async {
     var sharedPreferences = await SharedPreferences.getInstance();
     String access_token = sharedPreferences.getString('access_token');
     final _url = '$url/consultations';
     Map<String, dynamic> req = {
       'service': service,
-      'userId': userId,
       'salonId': salonId,
       'datetime': datetime,
     };
@@ -131,6 +130,7 @@ class _BookingScreenState extends State<BookingScreen> {
       height: 300.0,
       child: CupertinoDatePicker(
         initialDateTime: _dateTime,
+        minimumDate: DateTime.now(),
         use24hFormat: true,
         onDateTimeChanged: (dateTime) {
           setState(() {
@@ -178,14 +178,16 @@ class _BookingScreenState extends State<BookingScreen> {
         child: Text('Book'),
         onPressed: () {
           _key.currentState.validate();
-          setState(() {
-            addConsultation(
-              1,
-              _selectedSalon.id,
-              '',
-              _serviceController.text,
-            );
-          });
+          DateTime dateTimeNow = DateTime.now();
+          if (!dateTimeNow.isBefore(_dateTime)) {
+            print('Date choosen before now');
+            return;
+          }
+          addConsultation(
+            _selectedSalon.id,
+            _dateTime.toString(),
+            _serviceController.text,
+          );
         },
         style: ElevatedButton.styleFrom(
           primary: Color(0xFF00A693),
