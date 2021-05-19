@@ -21,26 +21,43 @@ class _CatalogScreenState extends State<CatalogScreen> {
   @override
   initState() {
     super.initState();
-    getAllProducts();
+    getAllProducts(null, null);
   }
 
-  getAllProducts() async {
+  getAllProducts(String name, String price) async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     String access_token = sharedPreferences.getString('access_token');
-    final _url = '$url/products';
+    var _url = '$url/products?';
+    if (name != null && name != '') {
+      _url += 'name=$name&';
+    }
+    if (price != null && price != '') {
+      _url += 'price=$price';
+    }
+    print(_url);
     var _uri = Uri.parse(_url);
     var res = await http.get(
       _uri,
       headers: {'Authorization': 'Bearer $access_token'},
     );
-    var jsonResponse = jsonDecode(res.body);
-
+    print(res);
+    var jsonResponse = await jsonDecode(res.body);
+    print(jsonResponse);
     List<Product> productsListTemp = [];
     productsList.clear();
 
     for (var p in jsonResponse) {
-      Product news = Product(p['id'], p['name'], p['brand'], p['model'],
-          p['description'], p['cost'], p['country'], p['material'], p['photo'], p['isFavorite']);
+      Product news = Product(
+          p['id'],
+          p['name'],
+          p['brand'],
+          p['model'],
+          p['description'],
+          p['cost'],
+          p['country'],
+          p['material'],
+          p['photo'],
+          p['isFavorite']);
       productsListTemp.add(news);
     }
     setState(() {
@@ -51,6 +68,79 @@ class _CatalogScreenState extends State<CatalogScreen> {
 
   @override
   Widget build(BuildContext context) {
+    TextEditingController _nameController = TextEditingController();
+    TextEditingController _costController = TextEditingController();
+
+    final name = Container(
+      width: 200.0,
+      child: TextFormField(
+        controller: _nameController,
+        keyboardType: TextInputType.text,
+        autofocus: false,
+        decoration: InputDecoration(
+          hintText: 'Title',
+          contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(16.0),
+          ),
+        ),
+      ),
+    );
+
+    final cost = Container(
+      width: 200.0,
+      child: TextFormField(
+        controller: _costController,
+        keyboardType: TextInputType.number,
+        autofocus: false,
+        decoration: InputDecoration(
+          hintText: 'Max cost',
+          contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(16.0),
+          ),
+        ),
+      ),
+    );
+
+    final searchByName = Padding(
+      padding: EdgeInsets.only(left: 8.0),
+      // ignore: deprecated_member_use
+      child: ElevatedButton(
+        child: Text('Search'),
+        onPressed: () {
+          //function
+          getAllProducts(_nameController.text, null);
+        },
+        style: ElevatedButton.styleFrom(
+          primary: Color(0xFF00A693),
+          onPrimary: Colors.white,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16.0),
+          ),
+        ),
+      ),
+    );
+
+    final filterByCostButton = Padding(
+      padding: EdgeInsets.only(left: 8.0),
+      // ignore: deprecated_member_use
+      child: ElevatedButton(
+        child: Text('Filter'),
+        onPressed: () {
+          //function
+          getAllProducts(null, _costController.text);
+        },
+        style: ElevatedButton.styleFrom(
+          primary: Color(0xFF00A693),
+          onPrimary: Colors.white,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16.0),
+          ),
+        ),
+      ),
+    );
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Color(0xFF00A693),
@@ -64,12 +154,32 @@ class _CatalogScreenState extends State<CatalogScreen> {
           color: Colors.white,
         ),
         onPressed: () => Navigator.of(context).push(
-          MaterialPageRoute(builder: (BuildContext context) => AddProductScreen()),
+          MaterialPageRoute(
+              builder: (BuildContext context) => AddProductScreen()),
         ),
       ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.end,
         children: <Widget>[
+          Container(
+              child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              Row(
+                children: [
+                  name,
+                  searchByName,
+                ],
+              ),
+              Row(
+                children: [
+                  cost,
+                  filterByCostButton,
+                ],
+              ),
+            ],
+          )),
           Expanded(
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: kDefaultPadding),
