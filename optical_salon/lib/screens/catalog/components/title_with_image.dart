@@ -18,29 +18,9 @@ class TitleWithImage extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Text(
-            product.name,
-            style: Theme.of(context)
-                .textTheme
-                .headline4
-                .copyWith(color: Colors.white, fontWeight: FontWeight.bold),
-          ),
-          SizedBox(height: kDefaultPadding),
+          SizedBox(height: 16.0),
           Row(
             children: <Widget>[
-              RichText(
-                text: TextSpan(
-                  children: [
-                    TextSpan(text: "Price\n"),
-                    TextSpan(
-                      text: "\$${product.cost}",
-                      style: Theme.of(context).textTheme.headline4.copyWith(
-                          color: Colors.white, fontWeight: FontWeight.bold),
-                    ),
-                  ],
-                ),
-              ),
-              SizedBox(width: kDefaultPadding),
               Expanded(
                 child: Hero(
                   tag: "${product.id}",
@@ -51,7 +31,136 @@ class TitleWithImage extends StatelessWidget {
                 ),
               ),
             ],
-          )
+          ),
+          SizedBox(height: 16.0),
+          Row(
+            children: [
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    product.name + ' ' + product.brand,
+                    style: Theme.of(context).textTheme.headline5.copyWith(
+                        color: Color(0xFF00A693), fontWeight: FontWeight.bold),
+                  ),
+                  Text(
+                    product.model,
+                    style: TextStyle(
+                      fontSize: 18.0,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+          SizedBox(height: 16.0),
+          Row(
+            children: [
+              Text(
+                'Brand:',
+                style: TextStyle(
+                  color: Color(0xFF00A693),
+                  fontWeight: FontWeight.bold,
+                  fontSize: 20.0,
+                ),
+              ),
+              SizedBox(width: 5.0),
+              Text(
+                product.brand,
+                style: TextStyle(fontSize: 20.0),
+              ),
+            ],
+          ),
+          SizedBox(height: 16.0),
+          Row(
+            children: [
+              Text(
+                'Model:',
+                style: TextStyle(
+                  color: Color(0xFF00A693),
+                  fontWeight: FontWeight.bold,
+                  fontSize: 20.0,
+                ),
+              ),
+              SizedBox(width: 5.0),
+              Text(
+                product.model,
+                style: TextStyle(fontSize: 20.0),
+              ),
+            ],
+          ),
+          SizedBox(height: 16.0),
+          Text(
+            'Description',
+            style: TextStyle(
+              color: Color(0xFF00A693),
+              fontWeight: FontWeight.bold,
+              fontSize: 20.0,
+            ),
+          ),
+          SizedBox(height: 8.0),
+          Text(
+            product.description,
+            style: TextStyle(fontSize: 20.0),
+          ),
+          SizedBox(height: 16.0),
+          Row(
+            children: [
+              Text(
+                'Material:',
+                style: TextStyle(
+                  color: Color(0xFF00A693),
+                  fontWeight: FontWeight.bold,
+                  fontSize: 20.0,
+                ),
+              ),
+              SizedBox(width: 5.0),
+              Text(
+                product.material,
+                style: TextStyle(fontSize: 20.0),
+              ),
+            ],
+          ),
+          SizedBox(height: 16.0),
+          Row(
+            children: [
+              Text(
+                'Country:',
+                style: TextStyle(
+                  color: Color(0xFF00A693),
+                  fontWeight: FontWeight.bold,
+                  fontSize: 20.0,
+                ),
+              ),
+              SizedBox(width: 5.0),
+              Text(
+                product.country,
+                style: TextStyle(fontSize: 20.0),
+              ),
+            ],
+          ),
+          SizedBox(height: 16.0),
+          RichText(
+            text: TextSpan(
+              children: [
+                TextSpan(
+                  text: "Price\n",
+                  style: TextStyle(
+                    fontSize: 20.0,
+                    fontWeight: FontWeight.bold,
+                    color: Color(0xFF00A693),
+                  ),
+                ),
+                TextSpan(
+                  text: "\$${product.cost}",
+                  style: Theme.of(context).textTheme.headline4.copyWith(
+                      color: Color(0xFFFFA500),
+                      fontWeight: FontWeight.bold),
+                ),
+              ],
+            ),
+          ),
         ],
       ),
     );

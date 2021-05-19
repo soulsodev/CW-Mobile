@@ -39,7 +39,7 @@ class _CatalogScreenState extends State<CatalogScreen> {
 
     for (var p in jsonResponse) {
       Product news = Product(p['id'], p['name'], p['brand'], p['model'],
-          p['description'], p['cost'], p['country'], p['material'], p['photo']);
+          p['description'], p['cost'], p['country'], p['material'], p['photo'], p['isFavorite']);
       productsListTemp.add(news);
     }
     setState(() {
@@ -68,7 +68,7 @@ class _CatalogScreenState extends State<CatalogScreen> {
                   crossAxisCount: 2,
                   mainAxisSpacing: kDefaultPadding,
                   crossAxisSpacing: kDefaultPadding,
-                  childAspectRatio: 0.5,
+                  childAspectRatio: 0.73,
                 ),
                 itemBuilder: (context, index) => ItemCard(
                   product: productsList[index],

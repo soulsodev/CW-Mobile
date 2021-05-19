@@ -10,7 +10,8 @@ class Product{
   String country;
   String material;
   String photo;
+  bool isFavorite;
 
   Product(this.id, this.name, this.brand, this.model, this.description, this.cost,
-      this.country, this.material, this.photo);
+      this.country, this.material, this.photo, this.isFavorite);
 }

@@ -39,7 +39,7 @@ class ItemCard extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.symmetric(vertical: kDefaultPadding / 4),
             child: Text(
-              product.name,
+              product.name + ' ' + product.brand,
               style: TextStyle(
                 color: Color(0xFF00A693),
               ),
