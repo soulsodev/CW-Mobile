@@ -1,14 +1,11 @@
 import 'dart:io';
-import 'package:http_parser/http_parser.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:optical_salon/constants.dart';
 import 'package:optical_salon/models/news.dart';
-import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:dio/dio.dart';
 
-import '../home_screen.dart';
 
 class AddNewsScreen extends StatefulWidget {
   const AddNewsScreen({Key key}) : super(key: key);

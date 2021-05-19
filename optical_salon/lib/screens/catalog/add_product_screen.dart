@@ -1,4 +1,3 @@
-import 'dart:ffi';
 import 'dart:io';
 
 import 'package:dio/dio.dart';
@@ -17,97 +16,104 @@ class AddProductScreen extends StatefulWidget {
 }
 
 class _AddProductScreenState extends State<AddProductScreen> {
+  TextEditingController _nameController = TextEditingController();
+  TextEditingController _brandController = TextEditingController();
+  TextEditingController _modelController = TextEditingController();
+  TextEditingController _descriptionController = TextEditingController();
+  TextEditingController _materialController = TextEditingController();
+  TextEditingController _countryController = TextEditingController();
+  TextEditingController _costController = TextEditingController();
+  final GlobalKey<FormState> _key = GlobalKey<FormState>();
+  File _image;
+  Dio dio = Dio();
+
+  // ignore: missing_return
+  Future<Product> uploadProduct(
+      String name,
+      String brand,
+      String model,
+      String description,
+      String cost,
+      String material,
+      String country,
+      File image) async {
+    SharedPreferences sharedPreferences =
+    await SharedPreferences.getInstance();
+    String access_token = sharedPreferences.getString('access_token');
+
+    final _url = '$url/products';
+
+    var formData = FormData.fromMap({
+      'name': name,
+      'brand': brand,
+      'model': model,
+      'description': description,
+      'cost': cost,
+      'material': material,
+      'country': country,
+      'photo': await MultipartFile.fromFile(_image.path, filename: _image.path),
+    });
+    dio.options.headers["authorization"] = "Bearer $access_token";
+    var res = await dio.post(_url, data: formData);
+
+    if (res.statusCode == 200 || res.statusCode == 201) {
+      print('Uploaded!');
+    } else {
+      throw Exception('Failed to upload news');
+    }
+  }
+
+  _imgFromCamera() async {
+    File image = await ImagePicker.pickImage(
+      source: ImageSource.camera,
+      imageQuality: 50,
+    );
+    setState(() {
+      _image = image;
+    });
+  }
+
+  _imgFromGallery() async {
+    File image = await ImagePicker.pickImage(
+        source: ImageSource.gallery, imageQuality: 50);
+    setState(() {
+      _image = image;
+    });
+  }
+
+  void _showPicker(context) {
+    showModalBottomSheet(
+      context: context,
+      builder: (BuildContext bc) {
+        return SafeArea(
+          child: Container(
+            child: new Wrap(
+              children: <Widget>[
+                new ListTile(
+                    leading: new Icon(Icons.photo_library),
+                    title: new Text('Photo Library'),
+                    onTap: () {
+                      _imgFromGallery();
+                      Navigator.of(context).pop();
+                    }),
+                new ListTile(
+                  leading: new Icon(Icons.photo_camera),
+                  title: new Text('Camera'),
+                  onTap: () {
+                    _imgFromCamera();
+                    Navigator.of(context).pop();
+                  },
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    TextEditingController _nameController = TextEditingController();
-    TextEditingController _brandController = TextEditingController();
-    TextEditingController _modelController = TextEditingController();
-    TextEditingController _descriptionController = TextEditingController();
-    TextEditingController _materialController = TextEditingController();
-    TextEditingController _countryController = TextEditingController();
-    TextEditingController _costController = TextEditingController();
-    final GlobalKey<FormState> _key = GlobalKey<FormState>();
-    File _image;
-    Dio dio = Dio();
-    FormData formData = FormData();
-
-    // ignore: missing_return
-    Future<Product> uploadProduct(String name, String brand, String model,
-        String description, Float cost, String material, String country, File image) async {
-      SharedPreferences sharedPreferences =
-          await SharedPreferences.getInstance();
-      String access_token = sharedPreferences.getString('access_token');
-
-      final _url = '$url/products';
-
-      var formData = FormData.fromMap({
-        'name': name,
-        'brand': brand,
-        'model': model,
-        'description': description,
-        'cost': cost,
-        'material': material,
-        'country': country,
-        'photo': await MultipartFile.fromFile(_image.path, filename: _image.path),
-      });
-      dio.options.headers["authorization"] = "Bearer $access_token";
-      var res = await dio.post(_url, data: formData);
-
-      if (res.statusCode == 200 || res.statusCode == 201) {
-        print('Uploaded!');
-      } else {
-        throw Exception('Failed to upload news');
-      }
-    }
-
-    _imgFromCamera() async {
-      File image = await ImagePicker.pickImage(
-        source: ImageSource.camera,
-        imageQuality: 50,
-      );
-      setState(() {
-        _image = image;
-      });
-    }
-
-    _imgFromGallery() async {
-      File image = await ImagePicker.pickImage(
-          source: ImageSource.gallery, imageQuality: 50);
-      setState(() {
-        _image = image;
-      });
-    }
-
-    void _showPicker(context) {
-      showModalBottomSheet(
-        context: context,
-        builder: (BuildContext bc) {
-          return SafeArea(
-            child: Container(
-              child: new Wrap(
-                children: <Widget>[
-                  new ListTile(
-                      leading: new Icon(Icons.photo_library),
-                      title: new Text('Photo Library'),
-                      onTap: () {
-                        _imgFromGallery();
-                        Navigator.of(context).pop();
-                      }),
-                  new ListTile(
-                    leading: new Icon(Icons.photo_camera),
-                    title: new Text('Camera'),
-                    onTap: () {
-                      _imgFromCamera();
-                      Navigator.of(context).pop();
-                    },
-                  ),
-                ],
-              ),
-            ),
-          );
-        },
-      );
-    }
 
     final name = TextFormField(
       controller: _nameController,
@@ -251,9 +257,15 @@ class _AddProductScreenState extends State<AddProductScreen> {
         onPressed: () {
           _key.currentState.validate();
           setState(() {
-            // uploadProduct(
-            //
-            // );
+            uploadProduct(
+                _nameController.text,
+                _brandController.text,
+                _modelController.text,
+                _descriptionController.text,
+                _costController.text,
+                _materialController.text,
+                _countryController.text,
+                _image);
             Navigator.pop(context);
           });
         },
