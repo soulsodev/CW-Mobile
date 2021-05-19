@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:optical_salon/models/user.dart';
 import 'package:http/http.dart' as http;
 
+import '../../constants.dart';
+
 class RegistrationScreen extends StatefulWidget {
   static String tag = 'registration-screen';
 
@@ -22,9 +24,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
 
   Future<User> signUp(
       String name, String phone, String email, String password) async {
-    final _url = "http://192.168.0.103:5000/auth/registration";
-    //final _url = "http://localhost:5000/auth/registration";
-    //final _url = "http://10.0.2.2:5000/auth/registration";
+    final _url = '$url/auth/registration';
     Map<String, dynamic> req = {
       'name': name,
       'phone': phone,

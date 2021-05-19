@@ -6,6 +6,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:optical_salon/models/news.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../constants.dart';
 import '../home_screen.dart';
 
 class UpdateNewsScreen extends StatefulWidget {
@@ -34,10 +35,7 @@ class _UpdateNewsScreenState extends State<UpdateNewsScreen> {
     String access_token = sharedPreferences.getString('access_token');
     var formData;
     var res;
-    final _url = "http://192.168.0.103:5000/news/$id";
-    //final _url = "http://192.168.43.244:5000/news/$id";
-    //final _url = "http: //localhost:5000/news/$id";
-    //final _url = "http://10.0.2.2:5000/news/$id";
+    final _url = '$url/news/$id';
 
     if (image != null) {
       formData = FormData.fromMap({
@@ -190,7 +188,7 @@ class _UpdateNewsScreenState extends State<UpdateNewsScreen> {
                       borderRadius: BorderRadius.circular(15.0),
                       image: DecorationImage(
                         image: NetworkImage(
-                            'http://192.168.0.103:5000/' + news.image),
+                            '$url/' + news.image),
                         fit: BoxFit.fill,
                       ),
                     ),

@@ -25,7 +25,7 @@ class SecondaryCard extends StatelessWidget {
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(12.0),
               image: DecorationImage(
-                image: NetworkImage('http://192.168.0.103:5000/' + news.image),
+                image: NetworkImage('$url/' + news.image),
                 fit: BoxFit.cover,
               ),
             ),

@@ -5,6 +5,7 @@ const kGrey1 = Color(0xFF9F9F9F);
 const kGrey2 = Color(0xFF6D6D6D);
 const kGrey3 = Color(0xFFEAEAEA);
 const kBlack = Color(0xFF1C1C1C);
+const kDefaultPadding = 20.0;
 
 var kNonActiveTabStyle = GoogleFonts.roboto(
   textStyle: TextStyle(fontSize: 14.0, color: kGrey1),
@@ -46,3 +47,5 @@ var descriptionStyle = GoogleFonts.roboto(
       fontSize: 15.0,
       height: 2.0,
     ));
+
+final url = "http://192.168.0.103:5000";

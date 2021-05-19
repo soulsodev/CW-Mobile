@@ -19,7 +19,6 @@ class NewsScreen extends StatefulWidget {
 }
 
 class _NewsScreenState extends State<NewsScreen> {
-  int _currentIndex = 0;
   List<News> newsList = [];
 
   @override
@@ -31,14 +30,10 @@ class _NewsScreenState extends State<NewsScreen> {
   getAllNews() async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     String access_token = sharedPreferences.getString('access_token');
-    final _url = "http://192.168.0.103:5000/news";
-    //final _url = "http://192.168.43.244:5000/news";
-    //final _url = "http://localhost:5000/news";
-    //final _url = "http://10.0.2.2:5000/news";
+    final _url = '$url/news';
     var _uri = Uri.parse(_url);
     var res = await http.get(_uri, headers: {'Authorization': 'Bearer $access_token'},);
     var jsonResponse = jsonDecode(res.body);
-    print(jsonResponse);
 
     List<News> newsListTemp = [];
     newsList.clear();
@@ -60,11 +55,17 @@ class _NewsScreenState extends State<NewsScreen> {
       return new Scaffold(
         appBar: new AppBar(
           title: new Text("Loading..."),
+          centerTitle: true,
           backgroundColor: Color(0xFFFFA500),
         ),
       );
     } else {
       return Scaffold(
+        appBar: AppBar(
+          backgroundColor: Color(0xFF00A693),
+          title: Text('News'),
+          centerTitle: true,
+        ),
         floatingActionButton: floatingActionButton(context),
         body: Container(
           child: ListView(

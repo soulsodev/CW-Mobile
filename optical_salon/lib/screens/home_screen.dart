@@ -4,7 +4,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:optical_salon/screens/account_screen.dart';
 import 'package:optical_salon/screens/booking_screen.dart';
 import 'package:optical_salon/screens/cart_screen.dart';
-import 'package:optical_salon/screens/catalog_screen.dart';
+import 'package:optical_salon/screens/catalog/catalog_screen.dart';
 import 'package:optical_salon/screens/authentification/login_screen.dart';
 import 'package:optical_salon/screens/news/news_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -40,14 +40,16 @@ class _HomeScreenState extends State<HomeScreen> {
   checkLoginStatus() async {
     sharedPreferences = await SharedPreferences.getInstance();
     if (sharedPreferences.getString('access_token') == null) {
-      Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (BuildContext context) => LoginScreen()), (Route<dynamic> route) => false);
+      Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (BuildContext context) => LoginScreen()),
+          (Route<dynamic> route) => false);
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: appBar(context),
+      //appBar: appBar(context),
       bottomNavigationBar: bottomNavigationBar(),
       body: _widgetOptions.elementAt(_currentIndex),
     );
@@ -111,35 +113,6 @@ class _HomeScreenState extends State<HomeScreen> {
         ],
         onTap: _onItemTapped,
       ),
-    );
-  }
-
-  AppBar appBar(BuildContext context) {
-    return AppBar(
-      centerTitle: true,
-      title: Text(
-        'Home',
-        style: TextStyle(
-          fontWeight: FontWeight.bold,
-          color: Colors.white,
-        ),
-      ),
-      backgroundColor: Color(0xFF00A693),
-      elevation: 0.0,
-      actions: [
-        IconButton(
-          icon: Icon(
-            Icons.logout,
-            color: Colors.white,
-          ),
-          onPressed: () {
-            sharedPreferences.clear();
-            // ignore: deprecated_member_use
-            sharedPreferences.commit();
-            Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (BuildContext context) => LoginScreen()), (Route<dynamic> route) => false);
-          },
-        ),
-      ],
     );
   }
 }

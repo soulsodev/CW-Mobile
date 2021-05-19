@@ -73,7 +73,7 @@ class _ReadNewsScreenState extends State<ReadNewsScreen> {
                   borderRadius: BorderRadius.circular(15.0),
                   image: DecorationImage(
                     image:
-                        NetworkImage('http://192.168.0.103:5000/' + news.image),
+                        NetworkImage('$url/' + news.image),
                     fit: BoxFit.fill,
                   ),
                 ),
@@ -152,10 +152,7 @@ class _ReadNewsScreenState extends State<ReadNewsScreen> {
   Future<News> addFavoriteNews(int id) async {
     var sharedPreferences = await SharedPreferences.getInstance();
     String access_token = sharedPreferences.getString('access_token');
-    final _url = "http://192.168.0.103:5000/users/favorite/news";
-    //final _url = "http://192.168.43.244:5000/users/favorite/news";
-    //final _url = "http: //localhost:5000/users/favorite/news";
-    //final _url = "http://10.0.2.2:5000/users/favorite/news";
+    final _url = '$url/users/favorite/news';
     Map<String, dynamic> req = {
       'newsId': id,
     };
@@ -173,10 +170,7 @@ class _ReadNewsScreenState extends State<ReadNewsScreen> {
   Future<News> deleteFavoriteNews(int id) async {
     var sharedPreferences = await SharedPreferences.getInstance();
     String access_token = sharedPreferences.getString('access_token');
-    final _url = "http://192.168.0.103:5000/users/favorite/news";
-    //final _url = "http://192.168.43.244:5000/users/favorite/news";
-    //final _url = "http: //localhost:5000/users/favorite/news";
-    //final _url = "http://10.0.2.2:5000/users/favorite/news";
+    final _url = '$url/users/favorite/news';
     Map<String, dynamic> req = {
       'newsId': id,
     };
@@ -194,10 +188,7 @@ class _ReadNewsScreenState extends State<ReadNewsScreen> {
   Future<News> deleteNews(int id) async {
     var sharedPreferences = await SharedPreferences.getInstance();
     String access_token = sharedPreferences.getString('access_token');
-    final _url = "http://192.168.0.103:5000/news/$id";
-    //final _url = "http://192.168.43.244:5000/news/$id";
-    //final _url = "http: //localhost:5000/news/$id";
-    //final _url = "http://10.0.2.2:5000/news/$id";
+    final _url = '$url/news/$id';
 
     dio.options.headers["authorization"] = "Bearer $access_token";
     var res = await dio.deleteUri(

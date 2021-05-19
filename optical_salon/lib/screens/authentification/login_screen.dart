@@ -3,6 +3,8 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:optical_salon/constants.dart';
+import 'package:optical_salon/models/user.dart';
 import 'package:optical_salon/screens/home_screen.dart';
 import 'package:optical_salon/screens/authentification/registration_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -21,18 +23,15 @@ class _LoginScreenState extends State<LoginScreen> {
   bool _isLoading = false;
 
   signIn(String email, String password) async {
-    final _url = "http://192.168.0.103:5000/auth/login";
-    //final _url = "http://192.168.43.244:5000/auth/login";
-    //final _url = "http://localhost:5000/auth/login";
-    //final _url = "http://10.0.2.2:5000/auth/login";
+    final _url = '$url/auth/login';
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    Map body = {"username": email, "password": password};
+    Map body = {'username': email, 'password': password};
     var jsonResponse;
 
     var res = await http.post(Uri.parse(_url), body: body);
     print(res.statusCode);
     // Check API status
-    if (res.statusCode == 201) {
+    if (res.statusCode == 201 || res.statusCode == 200) {
       jsonResponse = json.decode(res.body);
 
       if (jsonResponse != null) {

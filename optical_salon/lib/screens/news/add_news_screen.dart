@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:http_parser/http_parser.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:optical_salon/constants.dart';
 import 'package:optical_salon/models/news.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
@@ -31,10 +32,7 @@ class _AddNewsScreenState extends State<AddNewsScreen> {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     String access_token = sharedPreferences.getString('access_token');
 
-    final _url = "http://192.168.0.103:5000/news";
-    //final _url = "http://192.168.43.244:5000/news";
-    //final _url = "http://localhost:5000/news";
-    //final _url = "http://10.0.2.2:5000/news";
+    final _url = '$url/news';
 
     var formData = FormData.fromMap({
       'title': title,
