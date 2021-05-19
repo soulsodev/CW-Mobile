@@ -28,7 +28,6 @@ class _AddNewsScreenState extends State<AddNewsScreen> {
   // ignore: missing_return
   Future<News> uploadNews(
       String title, String description, File image) async {
-    print('UPLOADING NEWS');
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     String access_token = sharedPreferences.getString('access_token');
 

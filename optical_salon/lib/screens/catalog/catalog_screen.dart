@@ -6,6 +6,7 @@ import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../constants.dart';
+import 'add_product_screen.dart';
 import 'components/item_card.dart';
 import 'details_screen.dart';
 
@@ -55,6 +56,16 @@ class _CatalogScreenState extends State<CatalogScreen> {
         backgroundColor: Color(0xFF00A693),
         title: Text('Catalog'),
         centerTitle: true,
+      ),
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: Color(0xFFFFA500),
+        child: Icon(
+          Icons.add,
+          color: Colors.white,
+        ),
+        onPressed: () => Navigator.of(context).push(
+          MaterialPageRoute(builder: (BuildContext context) => AddProductScreen()),
+        ),
       ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
