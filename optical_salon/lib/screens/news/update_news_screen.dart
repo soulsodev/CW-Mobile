@@ -32,7 +32,7 @@ class _UpdateNewsScreenState extends State<UpdateNewsScreen> {
   Future<News> updateNews(
       int id, String title, String description, File image) async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    String access_token = sharedPreferences.getString('access_token');
+    String accessToken = sharedPreferences.getString('access_token');
     var formData;
     var res;
     final _url = '$url/news/$id';
@@ -44,14 +44,14 @@ class _UpdateNewsScreenState extends State<UpdateNewsScreen> {
         'image':
             await MultipartFile.fromFile(_image.path, filename: _image.path),
       });
-      dio.options.headers["authorization"] = "Bearer $access_token";
+      dio.options.headers["authorization"] = "Bearer $accessToken";
       res = await dio.put(_url, data: formData);
     } else {
       formData = FormData.fromMap({
         'title': title,
         'description': description,
       });
-      dio.options.headers["authorization"] = "Bearer $access_token";
+      dio.options.headers["authorization"] = "Bearer $accessToken";
       res = await dio.put(_url, data: formData);
     }
 

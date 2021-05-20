@@ -6,7 +6,7 @@ import 'package:optical_salon/models/product.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../constants.dart';
-import 'components/update_product_screen.dart';
+import 'update_product_screen.dart';
 
 class DetailsScreen extends StatefulWidget {
   final Product product;
@@ -218,12 +218,12 @@ class _DetailsScreenState extends State<DetailsScreen> {
 
   Future<Product> addFavoriteProduct(int id) async {
     var sharedPreferences = await SharedPreferences.getInstance();
-    String access_token = sharedPreferences.getString('access_token');
+    String accessToken = sharedPreferences.getString('access_token');
     final _url = '$url/users/favorite/products';
     Map<String, dynamic> req = {
       'productId': id,
     };
-    dio.options.headers['authorization'] = 'Bearer $access_token';
+    dio.options.headers['authorization'] = 'Bearer $accessToken';
     dio.options.headers['Content-Type'] = 'application/json';
     var res = await dio.post(_url, data: jsonEncode(req));
 
@@ -236,12 +236,12 @@ class _DetailsScreenState extends State<DetailsScreen> {
 
   Future<Product> deleteFavoriteProduct(int id) async {
     var sharedPreferences = await SharedPreferences.getInstance();
-    String access_token = sharedPreferences.getString('access_token');
+    String accessToken = sharedPreferences.getString('accessToken');
     final _url = '$url/users/favorite/products';
     Map<String, dynamic> req = {
       'productId': id,
     };
-    dio.options.headers['authorization'] = 'Bearer $access_token';
+    dio.options.headers['authorization'] = 'Bearer $accessToken';
     dio.options.headers['Content-Type'] = 'application/json';
     var res = await dio.deleteUri(Uri.parse(_url), data: jsonEncode(req));
 
@@ -288,10 +288,10 @@ class _DetailsScreenState extends State<DetailsScreen> {
 
   Future<Product> deleteProduct(int id) async {
     var sharedPreferences = await SharedPreferences.getInstance();
-    String access_token = sharedPreferences.getString('access_token');
+    String accessToken = sharedPreferences.getString('access_token');
     final _url = '$url/products/$id';
 
-    dio.options.headers["authorization"] = "Bearer $access_token";
+    dio.options.headers["authorization"] = "Bearer $accessToken";
     var res = await dio.deleteUri(
       Uri.parse(_url),
     );

@@ -1,11 +1,15 @@
 class User {
-  final int id;
-  final String name;
-  final String phone;
-  final String email;
-  final String password;
+  int id;
+  String name;
+  String phone;
+  String email;
+  String password;
+  List<User> userConsultations = [];
 
   User({this.id, this.name, this.phone, this.email, this.password});
+
+  User.profile(this.id, this.name, this.phone, this.email,
+      this.userConsultations);
 
   factory User.fromJson(Map<String, dynamic> json) {
     return User(

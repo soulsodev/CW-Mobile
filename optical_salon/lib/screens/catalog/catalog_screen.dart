@@ -26,7 +26,7 @@ class _CatalogScreenState extends State<CatalogScreen> {
 
   getAllProducts(String name, String price) async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    String access_token = sharedPreferences.getString('access_token');
+    String accessToken = sharedPreferences.getString('access_token');
     var _url = '$url/products?';
     if (name != null && name != '') {
       _url += 'name=$name&';
@@ -38,7 +38,7 @@ class _CatalogScreenState extends State<CatalogScreen> {
     var _uri = Uri.parse(_url);
     var res = await http.get(
       _uri,
-      headers: {'Authorization': 'Bearer $access_token'},
+      headers: {'Authorization': 'Bearer $accessToken'},
     );
     print(res);
     var jsonResponse = await jsonDecode(res.body);

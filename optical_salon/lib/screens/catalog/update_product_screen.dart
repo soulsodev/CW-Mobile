@@ -6,7 +6,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:optical_salon/models/product.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../../../constants.dart';
+import '../../constants.dart';
 
 class UpdateProductScreen extends StatefulWidget {
   final Product product;
@@ -41,7 +41,7 @@ class _UpdateProductScreenState extends State<UpdateProductScreen> {
       String country,
       File image) async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    String access_token = sharedPreferences.getString('access_token');
+    String accessToken = sharedPreferences.getString('access_token');
     var formData;
     var res;
     final _url = '$url/products/$id';
@@ -58,7 +58,7 @@ class _UpdateProductScreenState extends State<UpdateProductScreen> {
         'photo':
             await MultipartFile.fromFile(_image.path, filename: _image.path),
       });
-      dio.options.headers["authorization"] = "Bearer $access_token";
+      dio.options.headers["authorization"] = "Bearer $accessToken";
       res = await dio.put(_url, data: formData);
     } else {
       formData = FormData.fromMap({
@@ -70,7 +70,7 @@ class _UpdateProductScreenState extends State<UpdateProductScreen> {
         'material': material,
         'country': country,
       });
-      dio.options.headers["authorization"] = "Bearer $access_token";
+      dio.options.headers["authorization"] = "Bearer $accessToken";
       res = await dio.put(_url, data: formData);
     }
 

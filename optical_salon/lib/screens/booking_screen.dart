@@ -37,14 +37,14 @@ class _BookingScreenState extends State<BookingScreen> {
   Future<Consultation> addConsultation(
       int salonId, String datetime, String service) async {
     var sharedPreferences = await SharedPreferences.getInstance();
-    String access_token = sharedPreferences.getString('access_token');
+    String accessToken = sharedPreferences.getString('access_token');
     final _url = '$url/consultations';
     Map<String, dynamic> req = {
       'service': service,
       'salonId': salonId,
       'datetime': datetime,
     };
-    dio.options.headers['authorization'] = 'Bearer $access_token';
+    dio.options.headers['authorization'] = 'Bearer $accessToken';
     dio.options.headers['Content-Type'] = 'application/json';
     var res = await dio.post(_url, data: jsonEncode(req));
 
@@ -57,12 +57,12 @@ class _BookingScreenState extends State<BookingScreen> {
 
   getSalons() async {
     var sharedPreferences = await SharedPreferences.getInstance();
-    String access_token = sharedPreferences.getString('access_token');
+    String accessToken = sharedPreferences.getString('access_token');
     final _url = '$url/salons';
     var _uri = Uri.parse(_url);
     var res = await http.get(
       _uri,
-      headers: {'Authorization': 'Bearer $access_token'},
+      headers: {'Authorization': 'Bearer $accessToken'},
     );
     var jsonResponse = jsonDecode(res.body);
 

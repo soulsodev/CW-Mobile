@@ -26,7 +26,7 @@ class _AddNewsScreenState extends State<AddNewsScreen> {
   Future<News> uploadNews(
       String title, String description, File image) async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    String access_token = sharedPreferences.getString('access_token');
+    String accessToken = sharedPreferences.getString('access_token');
 
     final _url = '$url/news';
 
@@ -35,7 +35,7 @@ class _AddNewsScreenState extends State<AddNewsScreen> {
       'description': description,
       'image': await MultipartFile.fromFile(_image.path, filename: _image.path),
     });
-    dio.options.headers["authorization"] = "Bearer $access_token";
+    dio.options.headers["authorization"] = "Bearer $accessToken";
     var res = await dio.post(_url, data: formData);
 
     if (res.statusCode == 200 || res.statusCode == 201) {

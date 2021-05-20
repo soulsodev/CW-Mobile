@@ -151,12 +151,12 @@ class _ReadNewsScreenState extends State<ReadNewsScreen> {
 
   Future<News> addFavoriteNews(int id) async {
     var sharedPreferences = await SharedPreferences.getInstance();
-    String access_token = sharedPreferences.getString('access_token');
+    String accessToken = sharedPreferences.getString('access_token');
     final _url = '$url/users/favorite/news';
     Map<String, dynamic> req = {
       'newsId': id,
     };
-    dio.options.headers['authorization'] = 'Bearer $access_token';
+    dio.options.headers['authorization'] = 'Bearer $accessToken';
     dio.options.headers['Content-Type'] = 'application/json';
     var res = await dio.post(_url, data: jsonEncode(req));
 
@@ -169,12 +169,12 @@ class _ReadNewsScreenState extends State<ReadNewsScreen> {
 
   Future<News> deleteFavoriteNews(int id) async {
     var sharedPreferences = await SharedPreferences.getInstance();
-    String access_token = sharedPreferences.getString('access_token');
+    String accessToken = sharedPreferences.getString('access_token');
     final _url = '$url/users/favorite/news';
     Map<String, dynamic> req = {
       'newsId': id,
     };
-    dio.options.headers['authorization'] = 'Bearer $access_token';
+    dio.options.headers['authorization'] = 'Bearer $accessToken';
     dio.options.headers['Content-Type'] = 'application/json';
     var res = await dio.deleteUri(Uri.parse(_url), data: jsonEncode(req));
 
@@ -187,10 +187,10 @@ class _ReadNewsScreenState extends State<ReadNewsScreen> {
 
   Future<News> deleteNews(int id) async {
     var sharedPreferences = await SharedPreferences.getInstance();
-    String access_token = sharedPreferences.getString('access_token');
+    String accessToken = sharedPreferences.getString('access_token');
     final _url = '$url/news/$id';
 
-    dio.options.headers["authorization"] = "Bearer $access_token";
+    dio.options.headers["authorization"] = "Bearer $accessToken";
     var res = await dio.deleteUri(
       Uri.parse(_url),
     );

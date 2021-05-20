@@ -29,10 +29,10 @@ class _NewsScreenState extends State<NewsScreen> {
 
   getAllNews() async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    String access_token = sharedPreferences.getString('access_token');
+    String accessToken = sharedPreferences.getString('access_token');
     final _url = '$url/news';
     var _uri = Uri.parse(_url);
-    var res = await http.get(_uri, headers: {'Authorization': 'Bearer $access_token'},);
+    var res = await http.get(_uri, headers: {'Authorization': 'Bearer $accessToken'},);
     var jsonResponse = jsonDecode(res.body);
 
     List<News> newsListTemp = [];
