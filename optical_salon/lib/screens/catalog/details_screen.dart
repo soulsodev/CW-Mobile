@@ -5,6 +5,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../constants.dart';
 import 'components/title_with_image.dart';
+import 'components/update_product_screen.dart';
 
 class DetailsScreen extends StatefulWidget {
   final Product product;
@@ -65,7 +66,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
           onPressed: () => Navigator.pushReplacement(
             context,
             MaterialPageRoute(
-              //builder: (context) => UpdateNewsScreen(news: news),
+              builder: (context) => UpdateProductScreen(product: product),
             ),
           ),
         ),

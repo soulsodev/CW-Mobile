@@ -103,39 +103,45 @@ class _CatalogScreenState extends State<CatalogScreen> {
       ),
     );
 
-    final searchByName = Padding(
-      padding: EdgeInsets.only(left: 8.0),
-      // ignore: deprecated_member_use
-      child: ElevatedButton(
-        child: Text('Search'),
-        onPressed: () {
-          //function
-          getAllProducts(_nameController.text, null);
-        },
-        style: ElevatedButton.styleFrom(
-          primary: Color(0xFF00A693),
-          onPrimary: Colors.white,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16.0),
+    final searchByName = Container(
+      width: 100.0,
+      child: Padding(
+        padding: EdgeInsets.only(left: 8.0),
+        // ignore: deprecated_member_use
+        child: ElevatedButton(
+          child: Text('Search'),
+          onPressed: () {
+            //function
+            getAllProducts(_nameController.text, null);
+          },
+          style: ElevatedButton.styleFrom(
+            primary: Color(0xFF00A693),
+            onPrimary: Colors.white,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(16.0),
+            ),
           ),
         ),
       ),
     );
 
-    final filterByCostButton = Padding(
-      padding: EdgeInsets.only(left: 8.0),
-      // ignore: deprecated_member_use
-      child: ElevatedButton(
-        child: Text('Filter'),
-        onPressed: () {
-          //function
-          getAllProducts(null, _costController.text);
-        },
-        style: ElevatedButton.styleFrom(
-          primary: Color(0xFF00A693),
-          onPrimary: Colors.white,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16.0),
+    final filterByCostButton = Container(
+      width: 100.0,
+      child: Padding(
+        padding: EdgeInsets.only(left: 8.0),
+        // ignore: deprecated_member_use
+        child: ElevatedButton(
+          child: Text('Filter'),
+          onPressed: () {
+            //function
+            getAllProducts(null, _costController.text);
+          },
+          style: ElevatedButton.styleFrom(
+            primary: Color(0xFF00A693),
+            onPrimary: Colors.white,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(16.0),
+            ),
           ),
         ),
       ),
@@ -163,23 +169,27 @@ class _CatalogScreenState extends State<CatalogScreen> {
         mainAxisAlignment: MainAxisAlignment.end,
         children: <Widget>[
           Container(
-              child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              Row(
-                children: [
-                  name,
-                  searchByName,
-                ],
-              ),
-              Row(
-                children: [
-                  cost,
-                  filterByCostButton,
-                ],
-              ),
-            ],
-          )),
+            margin: EdgeInsets.only(top: 16.0),
+            child: Column(
+              children: <Widget>[
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    name,
+                    searchByName,
+                  ],
+                ),
+                SizedBox(height: 8.0),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    cost,
+                    filterByCostButton,
+                  ],
+                ),
+              ],
+            ),
+          ),
           Expanded(
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: kDefaultPadding),

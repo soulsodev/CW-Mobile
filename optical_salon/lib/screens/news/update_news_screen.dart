@@ -189,7 +189,7 @@ class _UpdateNewsScreenState extends State<UpdateNewsScreen> {
                       image: DecorationImage(
                         image: NetworkImage(
                             '$url/' + news.image),
-                        fit: BoxFit.fill,
+                        fit: BoxFit.cover,
                       ),
                     ),
                   ),
