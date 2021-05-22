@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:optical_salon/models/consultation.dart';
 import 'package:optical_salon/models/user.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -15,6 +16,7 @@ class AccountScreen extends StatefulWidget {
 
 class _AccountScreenState extends State<AccountScreen> {
   SharedPreferences sharedPreferences;
+  List<Consultation> consultationsList = [];
   User user;
 
   @override
@@ -43,21 +45,16 @@ class _AccountScreenState extends State<AccountScreen> {
     );
     var jsonResponse = jsonDecode(res.body);
 
-    var userTemp = User.profile(
-        jsonResponse['id'],
-        jsonResponse['name'],
-        jsonResponse['phone'],
-        jsonResponse['email'],
-        []);
+    var userTemp = User.profile(jsonResponse['id'], jsonResponse['name'],
+        jsonResponse['phone'], jsonResponse['email'], []);
+
     user = userTemp;
     return user;
   }
 
   @override
   Widget build(BuildContext context) {
-    setState(() {
-      getUser();
-    });
+    getUser();
     final userInfoLabel = Center(
       child: Text(
         'User information',
@@ -99,7 +96,7 @@ class _AccountScreenState extends State<AccountScreen> {
         ),
         SizedBox(width: 5.0),
         Text(
-         user.email,
+          user.email,
           style: TextStyle(fontSize: 20.0),
         ),
       ],
@@ -122,6 +119,24 @@ class _AccountScreenState extends State<AccountScreen> {
         ),
       ],
     );
+
+    // final service = Row(
+    //   children: [
+    //     Text(
+    //       'Phone:',
+    //       style: TextStyle(
+    //         color: Color(0xFF00A693),
+    //         fontWeight: FontWeight.bold,
+    //         fontSize: 20.0,
+    //       ),
+    //     ),
+    //     SizedBox(width: 5.0),
+    //     Text(
+    //       user.userConsultations[0].service,
+    //       style: TextStyle(fontSize: 20.0),
+    //     ),
+    //   ],
+    // );
 
     final userConsultationsLabel = Center(
       child: Text(
@@ -162,9 +177,6 @@ class _AccountScreenState extends State<AccountScreen> {
           SizedBox(height: 8.0),
           phone,
           SizedBox(height: 16.0),
-          userConsultationsLabel,
-          SizedBox(height: 16.0),
-
         ],
       ),
     );

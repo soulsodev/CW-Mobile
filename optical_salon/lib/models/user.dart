@@ -1,10 +1,12 @@
+import 'package:optical_salon/models/consultation.dart';
+
 class User {
   int id;
   String name;
   String phone;
   String email;
   String password;
-  List<User> userConsultations = [];
+  List<Consultation> userConsultations = [];
 
   User({this.id, this.name, this.phone, this.email, this.password});
 

@@ -1,0 +1,74 @@
+CREATE OR REPLACE FUNCTION getAllNews() RETURNS SETOF news AS
+$BODY$
+DECLARE
+    r_news news%rowtype;
+BEGIN
+    FOR r_news IN
+        SELECT * FROM news
+        LOOP
+            RETURN NEXT r_news;
+        END LOOP;
+    RETURN;
+END;
+$BODY$
+    LANGUAGE plpgsql;
+
+---------------------------------------------
+
+CREATE OR REPLACE FUNCTION getAllSalons() RETURNS SETOF salons AS
+$BODY$
+DECLARE
+    r_salons salons%rowtype;
+BEGIN
+    FOR r_salons IN
+        SELECT * FROM salons
+        LOOP
+            RETURN NEXT r_salons;
+        END LOOP;
+    RETURN;
+END;
+$BODY$
+    LANGUAGE plpgsql;
+
+-------------------------------------------------
+
+CREATE OR REPLACE PROCEDURE insert_salon(name varchar, city varchar, address varchar)
+    LANGUAGE SQL
+AS
+$$
+INSERT INTO salons (name, city, address, "createdAt", "updatedAt")
+VALUES (name, city, address, now(), now());
+$$;
+
+------------------------------------------------------
+
+CREATE OR REPLACE PROCEDURE update_salon(changeId integer, newName varchar, newCity varchar, newAddress varchar)
+    LANGUAGE SQL
+AS
+$$
+UPDATE salons
+set name    = newName,
+    address = newAddress,
+    city    = newCity
+where id = changeId
+$$;
+
+----------------------------------------------------
+
+CREATE OR REPLACE PROCEDURE delete_salon(deleteId integer)
+    LANGUAGE SQL
+AS
+$$
+DELETE from salons
+where id = deleteId
+$$;
+
+--------------------------------------------
+
+CALL insert_salon('salon1', 'minsk', 'addres');
+select *
+from getAllSalons();
+CALL update_salon(8, 'salon2', 'minsk', 'addres');
+CALL delete_salon(8);
+select *
+from getAllNews();
